@@ -1,0 +1,35 @@
+{
+  "name": "react-questions",
+  "version": "1.0.0",
+  "description": "A package for breaking down complex forms into bite-sized questions",
+  "main": "index.js",
+  "dependencies": {
+    "@storybook/addon-actions": "^5.0.6",
+    "@storybook/addon-links": "^5.0.6",
+    "@storybook/react": "^5.0.6",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "babel-loader": "^8.0.5"
+  },
+  "scripts": {
+    "test": "jest",
+    "storybook": "start-storybook"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaRizat/react-questions.git"
+  },
+  "keywords": [
+    "forms",
+    "questions"
+  ],
+  "author": "Jack Bishop",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaRizat/react-questions/issues"
+  },
+  "homepage": "https://github.com/DaRizat/react-questions#readme"
+}
