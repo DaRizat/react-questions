@@ -142,12 +142,14 @@ const Field = ({
   return React__default.createElement(FormConsumer, null, form => {
     const {
       name: formName,
-      value
+      value,
+      error
     } = form;
     const inputName = name === formName ? name : `${formName}.${name}`;
     return React__default.createElement(ChangeConsumer, null, handleChange => React__default.createElement(Component, {
       name: inputName,
       value: value,
+      error: error,
       handleChange: event => {
         event.preventDefault();
         handleChange({
@@ -271,7 +273,13 @@ var withQuestion = ((WrappedComponent, question) => {
   })))));
 });
 
-/* eslint-disable import/prefer-default-export */
+const WithNavigation = wrapped => React__default.createElement(NextConsumer, null, handleNext => React__default.createElement(PrevConsumer, null, handlePrev => {
+  const WrappedComponent = React__default.cloneElement(wrapped, { ...wrapped.props,
+    handleNext,
+    handlePrev
+  });
+  return React__default.createElement(WrappedComponent, null);
+}));
 
 exports.QuestionFlow = QuestionFlow;
 exports.Question = Question;
@@ -281,3 +289,4 @@ exports.Skip = Skip;
 exports.NextButton = NextButton;
 exports.PrevButton = PrevButton;
 exports.withQuestion = withQuestion;
+exports.withNavigation = WithNavigation;

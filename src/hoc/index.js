@@ -1,4 +1,4 @@
-import withQuestion from 'hoc/withQuestion';
-import withNavigation from 'hoc/withNavigation';
+import withQuestion from './withQuestion';
+import withNavigation from './withNavigation';
 
 export { withQuestion, withNavigation };
