@@ -3,7 +3,8 @@ import {
   FormProvider, ValuesConsumer, ErrorsConsumer,
 } from 'context';
 
-const Answer = ({ name, children }) => {
+export default (WrappedComponent, question) => {
+  const { name, condition } = question;
   return (
     <ValuesConsumer>
       {values => (
@@ -13,8 +14,12 @@ const Answer = ({ name, children }) => {
               name,
               value: values[name],
               error: errors[name],
-            }}>
-              {children}
+            }}
+            >
+              <WrappedComponent
+                {...question}
+                condition={(condition) ? () => condition(values) : null}
+              />
             </FormProvider>
           )}
         </ErrorsConsumer>
@@ -22,5 +27,3 @@ const Answer = ({ name, children }) => {
     </ValuesConsumer>
   );
 };
-
-export default Answer;

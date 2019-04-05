@@ -1,15 +1,39 @@
 import React from 'react';
-import { InputConsumer } from 'context';
+import PropTypes from 'prop-types';
+import { FormConsumer, ChangeConsumer } from 'context';
 
 const Field = ({ name, component }) => {
   const Component = component;
   return (
-    <InputConsumer>
-      {({ handleChange }) => (
-        
-      )}
-    </InputConsumer>
-  )
+    <FormConsumer>
+      {(form) => {
+        const { name: formName, value } = form;
+        const inputName = (name === formName) ? name : `${formName}.${name}`;
+        return (
+          <ChangeConsumer>
+            {handleChange => (
+              <Component
+                name={inputName}
+                value={value}
+                handleChange={(event) => {
+                  event.preventDefault();
+                  handleChange({ name: inputName, value: event.target.value });
+                }}
+              />
+            )}
+          </ChangeConsumer>
+        );
+      }}
+    </FormConsumer>
+  );
 };
 
-export const Field;
+Field.propTypes = {
+  name: PropTypes.string.isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.element,
+  ]).isRequired,
+};
+
+export default Field;

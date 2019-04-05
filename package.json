@@ -7,8 +7,18 @@
     "@storybook/addon-actions": "^5.0.6",
     "@storybook/addon-links": "^5.0.6",
     "@storybook/react": "^5.0.6",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^22.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -16,6 +26,8 @@
   },
   "scripts": {
     "test": "jest",
+    "lint": "eslint . ",
+    "lint:fix": "eslint . --fix",
     "storybook": "start-storybook"
   },
   "repository": {
@@ -31,5 +43,36 @@
   "bugs": {
     "url": "https://github.com/DaRizat/react-questions/issues"
   },
-  "homepage": "https://github.com/DaRizat/react-questions#readme"
+  "homepage": "https://github.com/DaRizat/react-questions#readme",
+  "eslintConfig": {
+    "extends": "airbnb",
+    "env": {
+      "jest/globals": true
+    },
+    "rules": {
+      "react/jsx-filename-extension": 0,
+      "no-unused-expressions": [
+        "error",
+        {
+          "allowTaggedTemplates": true
+        }
+      ]
+    },
+    "plugins": [
+      "jest"
+    ],
+    "globals": {
+      "window": true,
+      "document": true
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": [
+            "src"
+          ]
+        }
+      }
+    }
+  }
 }

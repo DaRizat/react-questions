@@ -1,53 +1,59 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { QuestionFlow } from 'organisms';
-import { Question, Answer } from 'molecules';
-import { Field } from 'atoms';
+import { Question } from 'molecules';
+// import { Field } from 'atoms';
+import TitleForm from 'forms/TitleForm';
 
 storiesOf('QA Flow')
   .add('Example Flow', () => (
     <QuestionFlow>
-      <Question asks="What is the title of your project?">
-        <Answer name="title">
-          <Field component={({ input: { handleChange } }) => (
-            <input
-              type="text"
-              onChange={handleChange}
-            />
-          )} />
-        </Answer>
-      </Question>
-      <Question asks="What type of project is this?">
-        <Answer>
-          <Field component={({ input: { handleChange } }) => (
-            <select onChange={handleChange}>
-              <option>Movie</option>
-              <option>Television</option>
-            </select>
-          )} />
-        </Answer>
-      </Question>
       <Question
+        name="title"
+        ask="What is the title of your project?"
+        answer={TitleForm}
+      />
+      <Question
+        required
+        name="title"
+        ask="No. really. What is the title of your project?"
+        answer={TitleForm}
+        condition={data => data.title !== undefined}
+      />
+      <Question
+        name="address"
+        ask="What is your address?"
+        answer={() => <div>Address Form</div>}
+      />
+    </QuestionFlow>
+  ));
+
+/*
+      <Question name="type" ask="What type of project is this?" answer={ProjectTypeForm} />
+      <Question
+        name="rating"
+        if={data => data.type === 'Movie'}
         asks="What is the MPAA rating of your project?"
-        if={{ type: 'Movie' }}
-      >
-        <Answer name="rating">
-          <Field component={({ input: { handleChange } }) => (
-            <select onChange={handleChange}>
-              <option>NR</option>
-              <option>R</option>
-              <option>PG-13</option>
-              <option>PG</option>
-              <option>G</option>
-            </select>
-          )} />
-        </Answer>
-      </Question>
+        component={MpaaRatingForm}
+      />
+      <Answer>
+        <Field component={({ input: { handleChange } }) => (
+          <select onChange={handleChange}>
+            <option>NR</option>
+            <option>R</option>
+            <option>PG-13</option>
+            <option>PG</option>
+            <option>G</option>
+          </select>
+        )}
+        />
+      </Answer>
       <Question
+        name="rating"
         asks="What is the television rating of your project?"
-        if={{ type: 'Television' }}
+        if={data => data.type === 'Television'}
       >
-        <Answer name="rating">
+        <Answer>
           <Field component={({ input: { handleChange } }) => (
             <select onChange={handleChange}>
               <option>TV-MA</option>
@@ -55,8 +61,8 @@ storiesOf('QA Flow')
               <option>TV-PG</option>
               <option>TV-G</option>
             </select>
-          )} />
+          )}
+          />
         </Answer>
       </Question>
-    </QuestionFlow>
-  ));
+*/
