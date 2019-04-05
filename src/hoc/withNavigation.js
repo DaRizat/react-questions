@@ -1,14 +1,26 @@
 import React from 'react';
 import { NextConsumer, PrevConsumer } from 'context';
 
-export default WrappedComponent => (
+const WithNavigation = wrapped => (
   <NextConsumer>
     {handleNext => (
       <PrevConsumer>
-        {handlePrev => (
-          <WrappedComponent handleNext={handleNext} handlePrev={handlePrev} />
-        )}
+        {(handlePrev) => {
+          const WrappedComponent = React.cloneElement(
+            wrapped,
+            {
+              ...wrapped.props,
+              handleNext,
+              handlePrev,
+            },
+          );
+          return (
+            <WrappedComponent />
+          );
+        }}
       </PrevConsumer>
     )}
   </NextConsumer>
 );
+
+export default WithNavigation;
