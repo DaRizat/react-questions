@@ -1,6 +1,6 @@
 {
   "name": "react-questions",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A package for breaking down complex forms into bite-sized questions",
   "main": "bundle.js",
   "dependencies": {
