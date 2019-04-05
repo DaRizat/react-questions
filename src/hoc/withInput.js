@@ -3,7 +3,8 @@ import { FormConsumer, InputProvider } from 'context';
 
 export default (WrappedComponent) => (
   <FormConsumer>
-    ({ name: formName }) => (
-      
+    ({ formName }) => (
+      <WrappedComponent />
     )
+  </FormConsumer>
 );
