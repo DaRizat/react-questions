@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
 import withQuestion from 'hoc/withQuestion';
+import withNavigation from 'hoc/withNavigation';
 
-export { withQuestion };
+export { withQuestion, withNavigation };

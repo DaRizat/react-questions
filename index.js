@@ -3,7 +3,7 @@ import { Question, Answer } from './src/molecules';
 import {
   Field, Skip, NextButton, PrevButton,
 } from './src/atoms';
-import { withQuestion } from './src/hoc';
+import { withQuestion, withNavigation } from './src/hoc';
 
 export {
   QuestionFlow,
@@ -14,4 +14,5 @@ export {
   NextButton,
   PrevButton,
   withQuestion,
+  withNavigation,
 };
