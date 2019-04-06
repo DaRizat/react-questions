@@ -142,14 +142,14 @@ const Field = ({
   return React__default.createElement(FormConsumer, null, form => {
     const {
       name: formName,
-      value,
-      error
+      values,
+      errors
     } = form;
     const inputName = name === formName ? name : `${formName}.${name}`;
     return React__default.createElement(ChangeConsumer, null, handleChange => React__default.createElement(Component, {
       name: inputName,
-      value: value,
-      error: error,
+      value: values[inputName],
+      error: errors[inputName],
       handleChange: event => {
         event.preventDefault();
         handleChange({
@@ -205,8 +205,8 @@ const Question = ({
   return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
     value: {
       name,
-      value: values[name],
-      error: errors[name]
+      values,
+      errors
     }
   }, condition && condition(values) ? React__default.createElement(Skip, null) : React__default.createElement(Answer, {
     question: ask
