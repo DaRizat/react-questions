@@ -262,7 +262,7 @@ var withQuestion = ((WrappedComponent, question) => {
     name,
     condition
   } = question;
-  return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
+  return () => React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
     value: {
       name,
       value: values[name],
@@ -273,13 +273,15 @@ var withQuestion = ((WrappedComponent, question) => {
   })))));
 });
 
-const WithNavigation = wrapped => React__default.createElement(NextConsumer, null, handleNext => React__default.createElement(PrevConsumer, null, handlePrev => {
-  const WrappedComponent = React__default.cloneElement(wrapped, { ...wrapped.props,
-    handleNext,
-    handlePrev
-  });
-  return React__default.createElement(WrappedComponent, null);
-}));
+const WithNavigation = WrappedComponent => {
+  const {
+    props
+  } = WrappedComponent;
+  return () => React__default.createElement(NextConsumer, null, handleNext => React__default.createElement(PrevConsumer, null, handlePrev => React__default.createElement(WrappedComponent, _extends({}, props, {
+    handleNext: handleNext,
+    handlePrev: handlePrev
+  }))));
+};
 
 exports.QuestionFlow = QuestionFlow;
 exports.Question = Question;
