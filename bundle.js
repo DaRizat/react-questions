@@ -34,8 +34,12 @@ const PrevConsumer = PrevContext.Consumer;
 class QuestionFlow extends React.Component {
   constructor(props) {
     super(props);
+    const {
+      children
+    } = props;
     this.state = {
-      index: 0,
+      index: children,
+      current: 0,
       values: {},
       errors: {}
     };
@@ -53,27 +57,27 @@ class QuestionFlow extends React.Component {
 
   handleNext() {
     const {
-      index
+      current
     } = this.state;
     const {
       children
     } = this.props;
 
-    if (index < children.length - 1) {
+    if (current < children.length - 1) {
       this.setState({
-        index: index + 1
+        current: current + 1
       });
     }
   }
 
   handlePrev() {
     const {
-      index
+      current
     } = this.state;
 
-    if (index > 0) {
+    if (current > 0) {
       this.setState({
-        index: index - 1
+        current: current - 1
       });
     }
   }
@@ -97,22 +101,25 @@ class QuestionFlow extends React.Component {
     }
     */
 
+    const {
+      children
+    } = this.props;
+    const newIndex = children.filter(child => !child.props.skipWhen || !child.props.skipWhen(newValues));
     this.setState({
       values: newValues,
-      errors
+      errors,
+      index: newIndex
     });
   }
 
   render() {
     const {
-      children
-    } = this.props;
-    const {
       values,
       errors,
-      index
+      index,
+      current
     } = this.state;
-    const activeChild = children[index];
+    const activeChild = index[current];
     return React__default.createElement(ValuesProvider, {
       value: values
     }, React__default.createElement(ErrorsProvider, {
@@ -133,6 +140,48 @@ QuestionFlow.propTypes = {
 };
 
 /* eslint-disable import/prefer-default-export */
+
+const Question = ({
+  children,
+  answer,
+  name,
+  ask
+}) => {
+  const Answer = answer || children;
+  return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
+    value: {
+      name,
+      values,
+      errors
+    }
+  }, React__default.createElement(Answer, {
+    question: ask
+  }))));
+};
+
+Question.propTypes = {
+  children: PropTypes.element,
+  answer: PropTypes.element,
+  name: PropTypes.string.isRequired,
+  ask: PropTypes.string.isRequired
+};
+Question.defaultProps = {
+  children: null,
+  answer: null
+};
+
+const Answer = ({
+  name,
+  children
+}) => {
+  return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
+    value: {
+      name,
+      value: values[name],
+      error: errors[name]
+    }
+  }, children)));
+};
 
 const Field = ({
   name,
@@ -193,51 +242,6 @@ const Button$1 = styled.button`
 const PrevButton = () => React__default.createElement(PrevConsumer, null, handlePrev => React__default.createElement(Button$1, {
   onClick: handlePrev
 }, "Prev"));
-
-const Question = ({
-  children,
-  answer,
-  name,
-  ask,
-  condition
-}) => {
-  const Answer = answer || children;
-  return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
-    value: {
-      name,
-      values,
-      errors
-    }
-  }, condition && condition(values) ? React__default.createElement(Skip, null) : React__default.createElement(Answer, {
-    question: ask
-  }))));
-};
-
-Question.propTypes = {
-  children: PropTypes.element,
-  answer: PropTypes.element,
-  name: PropTypes.string.isRequired,
-  ask: PropTypes.string.isRequired,
-  condition: PropTypes.func
-};
-Question.defaultProps = {
-  children: null,
-  answer: null,
-  condition: null
-};
-
-const Answer = ({
-  name,
-  children
-}) => {
-  return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
-    value: {
-      name,
-      value: values[name],
-      error: errors[name]
-    }
-  }, children)));
-};
 
 function _extends() {
   _extends = Object.assign || function (target) {
