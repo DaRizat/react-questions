@@ -14,8 +14,8 @@ const Question = ({
           {errors => (
             <FormProvider value={{
               name,
-              value: values[name],
-              error: errors[name],
+              values,
+              errors,
             }}
             >
               {(condition && condition(values))

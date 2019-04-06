@@ -7,15 +7,15 @@ const Field = ({ name, component }) => {
   return (
     <FormConsumer>
       {(form) => {
-        const { name: formName, value, error } = form;
+        const { name: formName, values, errors } = form;
         const inputName = (name === formName) ? name : `${formName}.${name}`;
         return (
           <ChangeConsumer>
             {handleChange => (
               <Component
                 name={inputName}
-                value={value}
-                error={error}
+                value={values[inputName]}
+                error={errors[inputName]}
                 handleChange={(event) => {
                   event.preventDefault();
                   handleChange({ name: inputName, value: event.target.value });
