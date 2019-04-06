@@ -5,7 +5,7 @@ import {
 
 export default (WrappedComponent, question) => {
   const { name, condition } = question;
-  return (
+  return (() => (
     <ValuesConsumer>
       {values => (
         <ErrorsConsumer>
@@ -25,5 +25,5 @@ export default (WrappedComponent, question) => {
         </ErrorsConsumer>
       )}
     </ValuesConsumer>
-  );
+  ));
 };

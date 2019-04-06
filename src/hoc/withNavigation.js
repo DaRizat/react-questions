@@ -3,7 +3,7 @@ import { NextConsumer, PrevConsumer } from 'context';
 
 const WithNavigation = (WrappedComponent) => {
   const { props } = WrappedComponent;
-  return (
+  return (() => (
     <NextConsumer>
       {handleNext => (
         <PrevConsumer>
@@ -13,7 +13,7 @@ const WithNavigation = (WrappedComponent) => {
         </PrevConsumer>
       )}
     </NextConsumer>
-  );
+  ));
 };
 
 export default WithNavigation;

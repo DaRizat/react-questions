@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Field, NextButton, PrevButton } from 'atoms';
+import FormNav from 'molecules/FormNav';
 
 const Container = styled.div`
   display: flex;
@@ -51,10 +52,7 @@ const TitleForm = ({ question }) => (
         <Input type="text" onChange={handleChange} />
       )}
     />
-    <Row>
-      <PrevButton />
-      <NextButton />
-    </Row>
+    <FormNav />
   </Container>
 );
 
