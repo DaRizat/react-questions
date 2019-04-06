@@ -15,15 +15,15 @@ storiesOf('QA Flow')
       />
       <Question
         required
-        name="title"
-        ask="No. really. What is the title of your project?"
+        name="joker"
+        ask="Ever dance with the Devil in the pale moonlight?"
+        skipWhen={values => values.title !== 'Batman'}
         answer={TitleForm}
-        condition={data => data.title !== undefined}
       />
       <Question
         name="address"
         ask="What is your address?"
-        answer={() => <div>Address Form</div>}
+        answer={TitleForm}
       />
     </QuestionFlow>
   ));

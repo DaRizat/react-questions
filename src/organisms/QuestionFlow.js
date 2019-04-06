@@ -11,8 +11,10 @@ import {
 class QuestionFlow extends Component {
   constructor(props) {
     super(props);
+    const { children } = props;
     this.state = {
-      index: 0,
+      index: children,
+      current: 0,
       values: {},
       errors: {},
     };
@@ -29,17 +31,17 @@ class QuestionFlow extends Component {
   */
 
   handleNext() {
-    const { index } = this.state;
+    const { current } = this.state;
     const { children } = this.props;
-    if (index < children.length - 1) {
-      this.setState({ index: index + 1 });
+    if (current < children.length - 1) {
+      this.setState({ current: current + 1 });
     }
   }
 
   handlePrev() {
-    const { index } = this.state;
-    if (index > 0) {
-      this.setState({ index: index - 1 });
+    const { current } = this.state;
+    if (current > 0) {
+      this.setState({ current: current - 1 });
     }
   }
 
@@ -54,13 +56,20 @@ class QuestionFlow extends Component {
       errors = runValidations(newValues);
     }
     */
-    this.setState({ values: newValues, errors });
+
+    const { children } = this.props;
+    const newIndex = children.filter(child => (
+      !child.props.skipWhen || !child.props.skipWhen(newValues)
+    ));
+
+    this.setState({ values: newValues, errors, index: newIndex });
   }
 
   render() {
-    const { children } = this.props;
-    const { values, errors, index } = this.state;
-    const activeChild = children[index];
+    const {
+      values, errors, index, current,
+    } = this.state;
+    const activeChild = index[current];
     return (
       <ValuesProvider value={values}>
         <ErrorsProvider value={errors}>
