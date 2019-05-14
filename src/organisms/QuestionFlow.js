@@ -46,23 +46,15 @@ class QuestionFlow extends Component {
   }
 
   handleChange(payload) {
-    // const { validate } = this.props;
     const { values } = this.state;
     const { name, value } = payload;
-    const errors = {};
     const newValues = Object.assign({}, values, { [name]: value });
-    /*
-    if (validate) {
-      errors = runValidations(newValues);
-    }
-    */
-
     const { children } = this.props;
     const newIndex = children.filter(child => (
       !child.props.skipWhen || !child.props.skipWhen(newValues)
     ));
 
-    this.setState({ values: newValues, errors, index: newIndex });
+    this.setState({ values: newValues, index: newIndex });
   }
 
   render() {
