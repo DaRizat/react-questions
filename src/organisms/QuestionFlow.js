@@ -31,10 +31,12 @@ class QuestionFlow extends Component {
   */
 
   handleNext() {
-    const { current } = this.state;
-    const { children } = this.props;
+    const { current, values } = this.state;
+    const { children, onSubmit } = this.props;
     if (current < children.length - 1) {
       this.setState({ current: current + 1 });
+    } else {
+      onSubmit(values);
     }
   }
 
@@ -85,6 +87,7 @@ QuestionFlow.propTypes = {
       PropTypes.func,
     ]),
   ).isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default QuestionFlow;
