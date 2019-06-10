@@ -51,12 +51,15 @@ class QuestionFlow extends Component {
     const { values } = this.state;
     const { name, value } = payload;
     const newValues = Object.assign({}, values, { [name]: value });
-    const { children } = this.props;
+    const { children, onChange } = this.props;
     const newIndex = children.filter(child => (
       !child.props.skipWhen || !child.props.skipWhen(newValues)
     ));
 
     this.setState({ values: newValues, index: newIndex });
+    if (onChange) {
+      onChange(newValues);
+    }
   }
 
   render() {
@@ -88,6 +91,11 @@ QuestionFlow.propTypes = {
     ]),
   ).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+};
+
+QuestionFlow.defaultProps = {
+  onChange: null,
 };
 
 export default QuestionFlow;
