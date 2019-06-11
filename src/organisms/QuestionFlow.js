@@ -31,10 +31,12 @@ class QuestionFlow extends Component {
   */
 
   handleNext() {
-    const { current } = this.state;
-    const { children } = this.props;
+    const { current, values } = this.state;
+    const { children, onSubmit } = this.props;
     if (current < children.length - 1) {
       this.setState({ current: current + 1 });
+    } else {
+      onSubmit(values);
     }
   }
 
@@ -49,12 +51,15 @@ class QuestionFlow extends Component {
     const { values } = this.state;
     const { name, value } = payload;
     const newValues = Object.assign({}, values, { [name]: value });
-    const { children } = this.props;
+    const { children, onChange } = this.props;
     const newIndex = children.filter(child => (
       !child.props.skipWhen || !child.props.skipWhen(newValues)
     ));
 
     this.setState({ values: newValues, index: newIndex });
+    if (onChange) {
+      onChange(newValues);
+    }
   }
 
   render() {
@@ -85,6 +90,12 @@ QuestionFlow.propTypes = {
       PropTypes.func,
     ]),
   ).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+};
+
+QuestionFlow.defaultProps = {
+  onChange: null,
 };
 
 export default QuestionFlow;
