@@ -57,16 +57,20 @@ class QuestionFlow extends React.Component {
 
   handleNext() {
     const {
-      current
+      current,
+      values
     } = this.state;
     const {
-      children
+      children,
+      onSubmit
     } = this.props;
 
     if (current < children.length - 1) {
       this.setState({
         current: current + 1
       });
+    } else {
+      onSubmit(values);
     }
   }
 
@@ -83,7 +87,6 @@ class QuestionFlow extends React.Component {
   }
 
   handleChange(payload) {
-    // const { validate } = this.props;
     const {
       values
     } = this.state;
@@ -91,25 +94,22 @@ class QuestionFlow extends React.Component {
       name,
       value
     } = payload;
-    const errors = {};
     const newValues = Object.assign({}, values, {
       [name]: value
     });
-    /*
-    if (validate) {
-      errors = runValidations(newValues);
-    }
-    */
-
     const {
-      children
+      children,
+      onChange
     } = this.props;
     const newIndex = children.filter(child => !child.props.skipWhen || !child.props.skipWhen(newValues));
     this.setState({
       values: newValues,
-      errors,
       index: newIndex
     });
+
+    if (onChange) {
+      onChange(newValues);
+    }
   }
 
   render() {
@@ -136,7 +136,12 @@ class QuestionFlow extends React.Component {
 }
 
 QuestionFlow.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.func])).isRequired
+  children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.func])).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func
+};
+QuestionFlow.defaultProps = {
+  onChange: null
 };
 
 /* eslint-disable import/prefer-default-export */
@@ -215,7 +220,23 @@ Field.propTypes = {
   component: PropTypes.oneOfType([PropTypes.func, PropTypes.element]).isRequired
 };
 
-const Skip = () => React__default.createElement(NextConsumer, null, nextAction => nextAction());
+const Skip = ({
+  when,
+  unless
+}) => React__default.createElement(NextConsumer, null, nextAction => {
+  if (when && !unless) {
+    nextAction();
+  }
+});
+
+Skip.propTypes = {
+  when: PropTypes.bool,
+  unless: PropTypes.bool
+};
+Skip.defaultProps = {
+  when: undefined,
+  unless: undefined
+};
 
 const Button = styled.button`
   background-color: green;
@@ -287,12 +308,12 @@ const WithNavigation = WrappedComponent => {
   }))));
 };
 
-exports.QuestionFlow = QuestionFlow;
-exports.Question = Question;
 exports.Answer = Answer;
 exports.Field = Field;
-exports.Skip = Skip;
 exports.NextButton = NextButton;
 exports.PrevButton = PrevButton;
-exports.withQuestion = withQuestion;
+exports.Question = Question;
+exports.QuestionFlow = QuestionFlow;
+exports.Skip = Skip;
 exports.withNavigation = WithNavigation;
+exports.withQuestion = withQuestion;
