@@ -31,7 +31,9 @@
     "test": "jest",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix",
-    "storybook": "start-storybook"
+    "storybook": "start-storybook",
+    "build": "rollup -c rollup.config.js",
+    "build:watch": "yarn build --w"
   },
   "repository": {
     "type": "git",
