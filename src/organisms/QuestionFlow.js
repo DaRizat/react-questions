@@ -15,7 +15,7 @@ class QuestionFlow extends Component {
     this.state = {
       index: children,
       current: 0,
-      values: {},
+      values: props.initialValues || {},
       errors: {},
     };
     this.handleChange = this.handleChange.bind(this);
@@ -92,10 +92,12 @@ QuestionFlow.propTypes = {
   ).isRequired,
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func,
+  initialValues: PropTypes.shape({}),
 };
 
 QuestionFlow.defaultProps = {
   onChange: null,
+  initialValues: null,
 };
 
 export default QuestionFlow;
