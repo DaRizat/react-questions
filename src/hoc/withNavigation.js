@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextConsumer, PrevConsumer } from 'context';
+import { IndexConsumer, NextConsumer, PrevConsumer } from 'context';
 
 const WithNavigation = (WrappedComponent) => {
   const { props } = WrappedComponent;
@@ -8,7 +8,17 @@ const WithNavigation = (WrappedComponent) => {
       {handleNext => (
         <PrevConsumer>
           {handlePrev => (
-            <WrappedComponent {...props} handleNext={handleNext} handlePrev={handlePrev} />
+            <IndexConsumer>
+              {index => (
+                <WrappedComponent
+                  {...props}
+                  handleNext={handleNext}
+                  handlePrev={handlePrev}
+                  current={index.current}
+                  total={index.total}
+                />
+              )}
+            </IndexConsumer>
           )}
         </PrevConsumer>
       )}
