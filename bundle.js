@@ -16,6 +16,10 @@ const InputContext = React__default.createContext({});
 const NextContext = React__default.createContext(() => {});
 const PrevContext = React__default.createContext(() => {});
 const ChangeContext = React__default.createContext(() => {});
+const IndexContext = React__default.createContext(() => ({
+  current: 0,
+  total: 0
+}));
 const ValuesProvider = ValuesContext.Provider;
 const ValuesConsumer = ValuesContext.Consumer;
 const ErrorsProvider = ErrorsContext.Provider;
@@ -30,6 +34,8 @@ const NextProvider = NextContext.Provider;
 const NextConsumer = NextContext.Consumer;
 const PrevProvider = PrevContext.Provider;
 const PrevConsumer = PrevContext.Consumer;
+const IndexProvider = IndexContext.Provider;
+const IndexConsumer = IndexContext.Consumer;
 
 class QuestionFlow extends React.Component {
   constructor(props) {
@@ -40,7 +46,7 @@ class QuestionFlow extends React.Component {
     this.state = {
       index: children,
       current: 0,
-      values: {},
+      values: props.initialValues || {},
       errors: {}
     };
     this.handleChange = this.handleChange.bind(this);
@@ -124,13 +130,18 @@ class QuestionFlow extends React.Component {
       value: values
     }, React__default.createElement(ErrorsProvider, {
       value: errors
+    }, React__default.createElement(IndexProvider, {
+      value: {
+        current,
+        total: index.length
+      }
     }, React__default.createElement(NextProvider, {
       value: this.handleNext
     }, React__default.createElement(PrevProvider, {
       value: this.handlePrev
     }, React__default.createElement(ChangeProvider, {
       value: this.handleChange
-    }, activeChild)))));
+    }, activeChild))))));
   }
 
 }
@@ -138,10 +149,12 @@ class QuestionFlow extends React.Component {
 QuestionFlow.propTypes = {
   children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.func])).isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  initialValues: PropTypes.shape({})
 };
 QuestionFlow.defaultProps = {
-  onChange: null
+  onChange: null,
+  initialValues: null
 };
 
 /* eslint-disable import/prefer-default-export */
@@ -150,7 +163,8 @@ const Question = ({
   children,
   answer,
   name,
-  ask
+  ask,
+  required
 }) => {
   const Answer = answer || children;
   return React__default.createElement(ValuesConsumer, null, values => React__default.createElement(ErrorsConsumer, null, errors => React__default.createElement(FormProvider, {
@@ -160,7 +174,8 @@ const Question = ({
       errors
     }
   }, React__default.createElement(Answer, {
-    question: ask
+    question: ask,
+    required: required
   }))));
 };
 
@@ -168,11 +183,13 @@ Question.propTypes = {
   children: PropTypes.element,
   answer: PropTypes.element,
   name: PropTypes.string.isRequired,
-  ask: PropTypes.string.isRequired
+  ask: PropTypes.string.isRequired,
+  required: PropTypes.bool
 };
 Question.defaultProps = {
   children: null,
-  answer: null
+  answer: null,
+  required: false
 };
 
 const Answer = ({
@@ -302,10 +319,12 @@ const WithNavigation = WrappedComponent => {
   const {
     props
   } = WrappedComponent;
-  return () => React__default.createElement(NextConsumer, null, handleNext => React__default.createElement(PrevConsumer, null, handlePrev => React__default.createElement(WrappedComponent, _extends({}, props, {
+  return () => React__default.createElement(NextConsumer, null, handleNext => React__default.createElement(PrevConsumer, null, handlePrev => React__default.createElement(IndexConsumer, null, index => React__default.createElement(WrappedComponent, _extends({}, props, {
     handleNext: handleNext,
-    handlePrev: handlePrev
-  }))));
+    handlePrev: handlePrev,
+    current: index.current,
+    total: index.total
+  })))));
 };
 
 exports.Answer = Answer;
