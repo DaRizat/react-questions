@@ -40,7 +40,7 @@ class QuestionFlow extends React.Component {
     this.state = {
       index: children,
       current: 0,
-      values: {},
+      values: props.initialValues || {},
       errors: {}
     };
     this.handleChange = this.handleChange.bind(this);
@@ -138,10 +138,12 @@ class QuestionFlow extends React.Component {
 QuestionFlow.propTypes = {
   children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.func])).isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  initialValues: PropTypes.shape({})
 };
 QuestionFlow.defaultProps = {
-  onChange: null
+  onChange: null,
+  initialValues: null
 };
 
 /* eslint-disable import/prefer-default-export */
