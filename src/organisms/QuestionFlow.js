@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ValuesProvider,
+  ChangeProvider,
   ErrorsProvider,
+  IndexProvider,
   NextProvider,
   PrevProvider,
-  ChangeProvider,
+  ValuesProvider,
 } from 'context';
 
 class QuestionFlow extends Component {
@@ -70,13 +71,15 @@ class QuestionFlow extends Component {
     return (
       <ValuesProvider value={values}>
         <ErrorsProvider value={errors}>
-          <NextProvider value={this.handleNext}>
-            <PrevProvider value={this.handlePrev}>
-              <ChangeProvider value={this.handleChange}>
-                {activeChild}
-              </ChangeProvider>
-            </PrevProvider>
-          </NextProvider>
+          <IndexProvider value={{ current, total: index.length }}>
+            <NextProvider value={this.handleNext}>
+              <PrevProvider value={this.handlePrev}>
+                <ChangeProvider value={this.handleChange}>
+                  {activeChild}
+                </ChangeProvider>
+              </PrevProvider>
+            </NextProvider>
+          </IndexProvider>
         </ErrorsProvider>
       </ValuesProvider>
     );

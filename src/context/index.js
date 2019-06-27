@@ -7,6 +7,7 @@ const InputContext = React.createContext({});
 const NextContext = React.createContext(() => {});
 const PrevContext = React.createContext(() => {});
 const ChangeContext = React.createContext(() => {});
+const IndexContext = React.createContext(() => ({ current: 0, total: 0 }));
 
 export const ValuesProvider = ValuesContext.Provider;
 export const ValuesConsumer = ValuesContext.Consumer;
@@ -28,3 +29,6 @@ export const NextConsumer = NextContext.Consumer;
 
 export const PrevProvider = PrevContext.Provider;
 export const PrevConsumer = PrevContext.Consumer;
+
+export const IndexProvider = IndexContext.Provider;
+export const IndexConsumer = IndexContext.Consumer;
