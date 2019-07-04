@@ -218,6 +218,7 @@ const Field = ({
     } = form;
     const inputName = name === formName ? name : `${formName}.${name}`;
     return React__default.createElement(ChangeConsumer, null, handleChange => React__default.createElement(Component, {
+      values: values,
       name: inputName,
       value: values[inputName],
       error: errors[inputName],

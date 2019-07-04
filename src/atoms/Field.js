@@ -13,6 +13,7 @@ const Field = ({ name, component }) => {
           <ChangeConsumer>
             {handleChange => (
               <Component
+                values={values}
                 name={inputName}
                 value={values[inputName]}
                 error={errors[inputName]}
