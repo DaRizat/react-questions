@@ -7,10 +7,12 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var React = require('react');
 var React__default = _interopDefault(React);
 var PropTypes = _interopDefault(require('prop-types'));
-var lodash = require('lodash');
+var set = _interopDefault(require('lodash/fp/set'));
+var get = _interopDefault(require('lodash/fp/get'));
+var unset = _interopDefault(require('lodash/fp/unset'));
+var yup = require('yup');
 var concat = _interopDefault(require('lodash/fp/concat'));
 var styled = _interopDefault(require('styled-components'));
-var yup = require('yup');
 
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -83,7 +85,7 @@ class QuestionFlow extends React.Component {
     _defineProperty(this, "state", {
       index: this.props.children,
       current: 0,
-      values: {},
+      values: this.props.initialValues || {},
       errors: {}
     });
 
@@ -94,18 +96,34 @@ class QuestionFlow extends React.Component {
       return children.filter(child => !child.props.when || child.props.when && child.props.when(values));
     });
 
-    _defineProperty(this, "handleNext", () => {
+    _defineProperty(this, "handleNext", async () => {
       const {
         current,
         values,
-        errors
+        index
       } = this.state;
       const {
         children,
-        onSubmit
+        onSubmit,
+        validates
       } = this.props;
+      const currentKey = index[current].props.name;
+      const validator = validates && yup.reach(validates, currentKey) || null;
 
-      if (Object.keys(errors).length === 0) {
+      if (validator) {
+        try {
+          const value = get(currentKey, values);
+          await validator.validate(value);
+          this.handleValidInput(currentKey);
+        } catch (e) {
+          this.handleInvalidInput({
+            name: currentKey,
+            error: e
+          });
+        }
+      }
+
+      if (!this.state.errors[currentKey]) {
         if (current < children.length - 1) {
           this.setState({
             current: current + 1
@@ -139,7 +157,7 @@ class QuestionFlow extends React.Component {
         name,
         value
       } = payload;
-      const newValues = lodash.set(name, value, values);
+      const newValues = set(name, value, values);
       const newIndex = this.calculateIndex(newValues);
       this.setState({
         values: newValues,
@@ -159,7 +177,7 @@ class QuestionFlow extends React.Component {
       const {
         errors
       } = this.state;
-      const newErrors = lodash.set(name, error.message, errors);
+      const newErrors = set(name, error.message, errors);
       this.setState({
         errors: newErrors
       });
@@ -171,8 +189,8 @@ class QuestionFlow extends React.Component {
       } = this.state;
       let newErrors = errors;
 
-      if (lodash.get(name, errors)) {
-        newErrors = lodash.unset(name, errors);
+      if (get(name, errors)) {
+        newErrors = unset(name, errors);
       }
 
       this.setState({
@@ -236,10 +254,12 @@ QuestionFlow.defaultProps = {
 const Ask = ({
   children,
   question,
-  name
+  name,
+  required
 }) => React__default.createElement(Answer, {
   name: name,
-  question: question
+  question: question,
+  required: required
 }, children);
 
 Ask.propTypes = {
@@ -285,7 +305,8 @@ class Answer extends React.Component {
     const {
       name,
       question,
-      children
+      children,
+      required
     } = this.props;
     const {
       registerInput
@@ -298,7 +319,10 @@ class Answer extends React.Component {
         registerInput
       }
     }, React__default.cloneElement(children, { ...children.props,
-      question
+      question,
+      required,
+      errors,
+      formName: name
     }))));
   }
 
@@ -455,11 +479,12 @@ const Field = ({
   } = React.useContext(ValidationContext);
   const handleChange = React.useContext(ChangeContext);
   const inputName = !name || name === formName ? formName : `${formName}.${name}`;
-  const value = lodash.get(inputName, values);
-  const error = lodash.get(inputName, errors);
+  const value = get(inputName, values);
+  const error = get(inputName, errors);
   const newChild = React__default.cloneElement(children, {
     name: inputName,
     value,
+    values,
     error,
     handleChange,
     handleInvalidInput,
@@ -556,6 +581,7 @@ const WithNavigation = WrappedComponent => {
 };
 
 exports.Answer = Answer;
+exports.Ask = Ask;
 exports.Field = Field;
 exports.NextButton = NextButton;
 exports.PrevButton = PrevButton;
