@@ -1,30 +1,22 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { QuestionFlow } from 'organisms';
-import { Question } from 'molecules';
+import { Ask, Branch } from 'molecules';
 // import { Field } from 'atoms';
 import TitleForm from 'forms/TitleForm';
+import TextForm from 'forms/TextForm';
 
-storiesOf('QA Flow')
+storiesOf('QA Flow', module)
   .add('Example Flow', () => (
     <QuestionFlow>
-      <Question
-        name="title"
-        ask="What is the title of your project?"
-        answer={TitleForm}
-      />
-      <Question
-        required
-        name="joker"
-        ask="Ever dance with the Devil in the pale moonlight?"
-        skipWhen={values => values.title !== 'Batman'}
-        answer={TitleForm}
-      />
-      <Question
-        name="address"
-        ask="What is your address?"
-        answer={TitleForm}
-      />
+      <Ask name="title" question="What is the title of your project?">
+        <TitleForm />
+      </Ask>
+      <Branch when={values => values.title === 'Batman'}>
+        <Ask name="joker" question="Ever dance with the Devil in the pale moonlight?">
+          <TextForm />
+        </Ask>
+      </Branch>
     </QuestionFlow>
   ));
 
